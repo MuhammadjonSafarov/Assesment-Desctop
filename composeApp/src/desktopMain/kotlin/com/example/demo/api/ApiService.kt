@@ -28,6 +28,7 @@ class ApiService {
                 protocol = URLProtocol.HTTPS
                 host = "dummyjson.com"
                 path("test")
+
             }
         }
         return if (result.status.isSuccess()){
