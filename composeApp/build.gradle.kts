@@ -47,35 +47,22 @@ compose.desktop {
         mainClass = "com.example.demo.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Deb,TargetFormat.Msi,TargetFormat.Dmg)
+            targetFormats(TargetFormat.Deb, TargetFormat.Msi, TargetFormat.Dmg)
             packageName = "com.example.demo"
             packageVersion = "1.0.0"
 
             windows {
                 // Windowsga tegishli sozlamalar
-                /*menuGroup = "Demo"
+                menuGroup = "Demo"
                 upgradeUuid = "123e4567-e89b-12d3-a456-426614174000"  // Unique UUID
                 shortcut = true  // Ishga tushirish uchun shortcut yaratish
-                menu = true*/
-                iconFile.set(project.file("resources/avatar.ico"))
-            }
-            macOS {
-                iconFile.set(project.file("resources/avatar.icns"))
-                macOS {
-                    bundleID = "org.jetbrains.compose.examples.deeplinking"
-                    infoPlist {
-                        extraKeysRawXml = macExtraPlistKeys
-                    }
-                }
+                menu = true
+                iconFile.set(project.file("resources/launcher.ico"))
             }
         }
 
+        buildTypes.release.proguard {
+            optimize.set(false)
+        }
     }
 }
-val macExtraPlistKeys: String
-    get() = """
-        <dict>
-    <key>NSCameraUsageDescription</key>
-    <string>This app requires camera access to capture photos or videos.</string>
-</dict>
-    """
