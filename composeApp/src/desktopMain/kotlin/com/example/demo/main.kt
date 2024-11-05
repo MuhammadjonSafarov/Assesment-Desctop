@@ -3,16 +3,17 @@ package com.example.demo
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.window.*
-import demo.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.painterResource
+import toefl_test.composeapp.generated.resources.Res
+import toefl_test.composeapp.generated.resources.avatar
 
 fun main() = application {
 
     /* var secondWindowOpened by remember { mutableStateOf(true) }
      var apiResponse by remember { mutableStateOf("Waiting...") }
      var scope = rememberCoroutineScope()*/
-  /*  var tryState = rememberTrayState()
-    val icon = painterResource(Res.drawable)
+    var tryState = rememberTrayState()
+    val icon = painterResource(Res.drawable.avatar)
     if (isTraySupported) {
         Tray(
             state = tryState,
@@ -31,9 +32,12 @@ fun main() = application {
                 onClick = ::exitApplication
             )
         })
-    }*/
+    }
 
-    Window(onCloseRequest = ::exitApplication, title = "Demo", onKeyEvent = { it ->
+    Window(
+        onCloseRequest = ::exitApplication,
+        title = "Toefl test",
+        onKeyEvent = { it ->
         if (it.key == Key.Delete) {
             println("DELETE KEY PRESSED")
             true
@@ -41,31 +45,6 @@ fun main() = application {
             false
         }
     }) {
-        //CameraView()
         App()
-        /*if (secondWindowOpened){
-            Window(
-                onCloseRequest = { secondWindowOpened = false },
-                title = "New window",
-                state = WindowState(width = 300.dp , height = 600.dp),
-                resizable = false
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Button(onClick = {
-                        scope.launch {
-                            apiResponse = ApiService().getFetchData()
-                        }
-                    }){
-                        Text(text = "Click Me")
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = apiResponse)
-                }
-            }
-        }*/
     }
 }

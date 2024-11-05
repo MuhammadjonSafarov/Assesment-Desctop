@@ -39,7 +39,7 @@ class SelectedPlaceScreen(val language:String) : Screen {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = painterResource("logo_2.xml"), // Ikona resursi
+                painter = painterResource("logo.xml"),
                 contentDescription = "Icon",
                 tint = Color.Unspecified,
                 modifier = Modifier
@@ -55,7 +55,7 @@ class SelectedPlaceScreen(val language:String) : Screen {
                 )
                 Box(
                     modifier = Modifier
-                        .zIndex(if (firstExpanded) 1f else 0f) // Z-index bilan birinchi menyuni ustiga olib kelish
+                        .zIndex(if (firstExpanded) 1f else 0f)
                 ) {
                     Row(
                         modifier = Modifier

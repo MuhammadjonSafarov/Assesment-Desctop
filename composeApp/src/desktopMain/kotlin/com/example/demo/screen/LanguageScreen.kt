@@ -79,7 +79,7 @@ class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress:
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    painter = painterResource("logo_2.xml"), // Ikona resursi
+                    painter = painterResource("logo.xml"),
                     contentDescription = "Icon",
                     tint = Color.Unspecified,
                     modifier = Modifier.fillMaxWidth(0.414f).fillMaxHeight(0.24f)
@@ -88,13 +88,13 @@ class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress:
                 Text(strings.app_welcome)
                 Button(
                     modifier = Modifier.padding(all = 12.dp), onClick = {
-                        coroutineScope.launch {
+                        /*coroutineScope.launch {
                             snackbarHostState.showSnackbar(
                                 actionLabel = "OK",// Optional: Amal uchun label (masalan, OK)
                                 message = "Customized Snackbar", duration = SnackbarDuration.Long
                             )
-                        }
-                        //navigator.push(SelectedPlaceScreen(locale.language))
+                        }*/
+                        navigator.push(SelectedPlaceScreen(locale.language))
                     }, colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color.White, contentColor = AppColors.textColorBlue
                     ), elevation = ButtonDefaults.elevation(0.dp), border = BorderStroke(1.dp, AppColors.textColorBlue)

@@ -40,7 +40,7 @@ class WelcomeScreen:Screen {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painter = painterResource("logo_2.xml"), // Ikona resursi
+                        painter = painterResource("logo.xml"), // Ikona resursi
                         contentDescription = "Icon",
                         tint = Color.Unspecified,
                         modifier = Modifier

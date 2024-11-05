@@ -5,13 +5,14 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.example.demo.screen.HomeScreen
+import com.example.demo.screen.WelcomeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        Navigator(HomeScreen()) { navigator ->
+        Navigator(WelcomeScreen()) { navigator ->
             SlideTransition(navigator)
         }/*var showContent by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
