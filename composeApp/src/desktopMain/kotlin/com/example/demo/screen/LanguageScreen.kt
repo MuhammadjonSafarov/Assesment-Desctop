@@ -28,7 +28,7 @@ class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress:
         val strings = getStrings(locale)
         var expanded by remember { mutableStateOf(false) }
         val snackbarHostState = remember { SnackbarHostState() }
-        val coroutineScope = rememberCoroutineScope()
+
         Box(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.align(Alignment.TopEnd)) {
                 Button(

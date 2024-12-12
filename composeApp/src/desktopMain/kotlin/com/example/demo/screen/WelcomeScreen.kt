@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.demo.screen.auth.LoginScreen
 import com.example.demo.util.AppColors
 import com.example.demo.util.getLocalIpAddress
 import com.example.demo.util.getMacAddress
@@ -19,6 +20,7 @@ import com.example.demo.util.isInternetAvailable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import java.time.Duration
+import java.util.prefs.Preferences
 
 class WelcomeScreen:Screen {
 
@@ -28,11 +30,14 @@ class WelcomeScreen:Screen {
         var isLoading by remember { mutableStateOf(false) }
         var ipAddress by remember { mutableStateOf("") }
         var macAddress by remember { mutableStateOf("") }
-
         val scope = rememberCoroutineScope()
-
+        val preference = Preferences.userRoot().node("my_app")
+        val token =  preference.get("key_user_token","")
         if (ipAddress.isNotEmpty() && macAddress.isNotEmpty() && isLoading) {
-            navigator.push(LanguageScreen(isLoading,ipAddress,macAddress))
+            if (token.isNotEmpty())
+                navigator.push(SelectExamScreen())
+            else
+                navigator.push(LoginScreen())
         } else {
             Box (modifier = Modifier.fillMaxSize()){
                 Column (modifier = Modifier.align(Alignment.Center),
@@ -51,7 +56,6 @@ class WelcomeScreen:Screen {
                         .padding(12.dp))
                     CircularProgressIndicator(color = AppColors.textColorBlue)
                 }
-
             }
         }
 

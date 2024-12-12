@@ -8,61 +8,61 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toComposeImageBitmap
 import cafe.adriel.voyager.core.screen.Screen
 import com.github.sarxos.webcam.Webcam
-import kotlinx.coroutines.delay
+import com.github.sarxos.webcam.WebcamResolution
+import kotlinx.coroutines.*
+import org.bytedeco.javacv.FFmpegFrameRecorder
+import org.bytedeco.javacv.Frame
+import org.bytedeco.javacv.Java2DFrameConverter
+import java.awt.image.BufferedImage
 
-data class DetailScreen(val id: Long) : Screen {
+class DetailScreen : Screen {
     @Composable
     override fun Content() {
         CameraView()
     }
 }
+
 @Composable
 fun CameraView() {
     var bitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+    val scope = rememberCoroutineScope()
     val webcam = Webcam.getDefault()
-    DisposableEffect(Unit) {
-        webcam.open()
-        onDispose {
-            webcam.close()
-        }
-    }
+    webcam.setViewSize(WebcamResolution.VGA.size)
+    webcam.open()
 
-    LaunchedEffect(Unit) {
-        while (true) {
-            val image = webcam.image
-            bitmap = image.toComposeImageBitmap()
-            delay(100)
+
+    val recorder = FFmpegFrameRecorder("output_video.mp4", webcam.viewSize.width, webcam.viewSize.height)
+    recorder.format = "mp4"
+    recorder.videoCodec = org.bytedeco.ffmpeg.global.avcodec.AV_CODEC_ID_H264
+    recorder.frameRate = 30.0 // Frame rate - 30 FPS
+    recorder.start()
+
+    val converter = Java2DFrameConverter()
+
+    val startTime = System.currentTimeMillis()
+
+    LaunchedEffect(Unit){
+        scope.launch{
+            withContext(Dispatchers.IO){
+                while (System.currentTimeMillis() - startTime < 10000) {  // 10000 millisekund = 10 soniya
+                    val image: BufferedImage = webcam.image
+                    val frame: Frame = converter.convert(image)
+                    bitmap = image.toComposeImageBitmap()
+                    recorder.record(frame)
+                }
+            }
         }
     }
     bitmap?.let {
-        Image(bitmap = it , contentDescription = "Camera Feed", modifier = Modifier.fillMaxSize())
+        Image(bitmap = it, contentDescription = "Front Camera", modifier = Modifier.fillMaxSize())
+    }
+
+    DisposableEffect(Unit){
+        onDispose {
+            recorder.stop()
+            recorder.release()
+            webcam.close()
+            println("Video saqlandi: output_video.mp4")
+        }
     }
 }
-
-/* var currentLanguage by remember { mutableStateOf("uz") }
-
-     Column(
-         modifier = androidx.compose.ui.Modifier.padding(16.dp)
-     ) {
-         Text(text = Localization.getString("hello"))
-         Spacer(modifier = androidx.compose.ui.Modifier.height(8.dp))
-         Text(text = Localization.getString("goodbye"))
-
-         Spacer(modifier = androidx.compose.ui.Modifier.height(16.dp))
-
-         Row {
-             Button(onClick = {
-                 currentLanguage = "en"
-                 Localization.switchLocale(currentLanguage)
-             }) {
-                 Text("English")
-             }
-             Spacer(modifier = androidx.compose.ui.Modifier.width(8.dp))
-             Button(onClick = {
-                 currentLanguage = "uz"
-                 Localization.switchLocale(currentLanguage)
-             }) {
-                 Text("O'zbek")
-             }
-         }
-     }*/

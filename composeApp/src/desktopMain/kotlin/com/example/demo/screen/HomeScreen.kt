@@ -31,7 +31,7 @@ class HomeScreen : Screen {
                 /*val bitmap = painterResource(Res.drawable.logo)
                 Image(bitmap,"Logo",Modifier.width(200.dp).height(100.dp))*/
                 Button(onClick = {
-                    navigator.push(DetailScreen(Random.nextLong(0, 100)))
+                    navigator.push(DetailScreen())
                 }) {
                     Text(text = "Go to Details")
                 }

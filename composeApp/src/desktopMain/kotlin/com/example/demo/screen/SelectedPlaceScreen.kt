@@ -149,7 +149,7 @@ class SelectedPlaceScreen(val language:String) : Screen {
             }
 
             Button(onClick = {
-                navigator.pop()
+                navigator.push(DetailScreen())
             }, elevation = ButtonDefaults.elevation(0.dp),
                 border = BorderStroke(1.dp,if(selectedFirstOption.isNotEmpty() && selectedSecondOption.isNotEmpty()) Color.Blue else Color.Gray),
                 colors = ButtonDefaults.buttonColors(

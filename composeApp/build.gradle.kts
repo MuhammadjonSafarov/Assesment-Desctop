@@ -24,6 +24,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
 
             //ktor
+            implementation("io.ktor:ktor-client-logging:2.3.0")
+            implementation("io.ktor:ktor-client-serialization:2.3.0")
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.core)
@@ -34,6 +36,13 @@ kotlin {
             implementation(libs.voyager.transitions)
 
             implementation("com.github.sarxos:webcam-capture:0.3.12")
+            implementation("org.bytedeco:javacv-platform:1.5.7")
+            implementation("javazoom:jlayer:1.0.1")
+
+            //implementation("io.coil-kt:coil-compose:2.0.0")
+            //implementation ("org.jcodec:jcodec:0.2.5")
+            //implementation("org.openjfx:javafx-media:17.0.0")
+            //implementation("com.github.finnkuusisto:tinysound:1.1.1")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -47,7 +56,7 @@ compose.desktop {
         mainClass = "com.example.demo.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Deb, TargetFormat.Msi, TargetFormat.Dmg)
+            targetFormats(TargetFormat.Deb, TargetFormat.Msi, TargetFormat.Exe)
             packageName = "com.example.demo"
             packageVersion = "1.0.0"
 
@@ -57,7 +66,7 @@ compose.desktop {
                 upgradeUuid = "123e4567-e89b-12d3-a456-426614174000"  // Unique UUID
                 shortcut = true  // Ishga tushirish uchun shortcut yaratish
                 menu = true
-                iconFile.set(project.file("resources/launcher.ico"))
+                iconFile.set(project.file("resources/ic_launcher_playstore.ico"))
             }
         }
 

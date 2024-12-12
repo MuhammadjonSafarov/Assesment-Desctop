@@ -1,9 +1,13 @@
 package com.example.demo.util
 
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.skia.Image
 import java.net.InetAddress
 import java.net.NetworkInterface
+import java.net.URL
 
 suspend fun getLocalIpAddress(): String {
     return withContext(Dispatchers.IO){
@@ -39,4 +43,8 @@ suspend fun isInternetAvailable(): Boolean {
             false // Istisno yuz berganda internet yo'q deb hisoblanadi
         }
     }
+}
+fun loadPicture(url:String): ImageBitmap {
+    return Image.makeFromEncoded(URL(url).readBytes())
+        .toComposeImageBitmap()
 }
