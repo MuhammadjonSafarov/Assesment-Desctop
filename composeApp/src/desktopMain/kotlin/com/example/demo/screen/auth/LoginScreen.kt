@@ -11,7 +11,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.demo.api.ApiService
+import com.example.demo.screen.SelectExamScreen
 import com.example.demo.util.AppColors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +24,7 @@ import java.util.prefs.Preferences
 class LoginScreen : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
         var username by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var isLoading by remember { mutableStateOf(false) }
@@ -106,6 +110,7 @@ class LoginScreen : Screen {
                         preference.put("key_user_token",token)
                         withContext(Dispatchers.Main){
                             isLoading = false
+                            navigator.push(SelectExamScreen())
                         }
                     }
                 }

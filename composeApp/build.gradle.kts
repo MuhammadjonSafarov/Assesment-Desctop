@@ -39,6 +39,10 @@ kotlin {
             implementation("org.bytedeco:javacv-platform:1.5.7")
             implementation("javazoom:jlayer:1.0.1")
 
+            implementation("com.google.zxing:core:3.5.2")
+            implementation("com.google.zxing:javase:3.5.2")
+
+            //coil
             //implementation("io.coil-kt:coil-compose:2.0.0")
             //implementation ("org.jcodec:jcodec:0.2.5")
             //implementation("org.openjfx:javafx-media:17.0.0")

@@ -1,6 +1,5 @@
 package com.example.demo.api
 
-import com.example.demo.common.BASE_URL
 import com.example.demo.data.BaseResponse
 import com.example.demo.data.LoginRequest
 import com.example.demo.data.LoginResponse
@@ -16,19 +15,20 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.FileOutputStream
 
 class ApiService {
     private val httpClient = HttpClient(CIO) {
-        install(ContentNegotiation){
+        install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
                 isLenient = true
                 ignoreUnknownKeys = true
             })
-            install(HttpTimeout){
+            install(HttpTimeout) {
                 requestTimeoutMillis = 15_000
             }
         }
@@ -37,7 +37,8 @@ class ApiService {
             logger = Logger.DEFAULT // Default logger prints to console
         }
     }
-    suspend fun getFetchData():String{
+
+    suspend fun getFetchData(): String {
         val result = httpClient.get {
             url {
                 protocol = URLProtocol.HTTPS
@@ -45,35 +46,35 @@ class ApiService {
                 path("test")
             }
         }
-        return if (result.status.isSuccess()){
+        return if (result.status.isSuccess()) {
             result.bodyAsText()
-        }else{
+        } else {
             result.status.description
         }
     }
 
-    suspend fun getListening(id:Long,token:String): ListeningData?{
+    suspend fun getListening(id: Long, token: String): ListeningData? = withContext(Dispatchers.IO) {
         val result = httpClient.get {
             url {
                 protocol = URLProtocol.HTTPS
                 host = "test.assessmenttest.uz"
-                path("api/v1/listening/7")
+                path("api/v1/listening/1")
             }
-            headers{
-                append(HttpHeaders.Authorization,"Bearer $token")
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
             }
         }
-        return if (result.status.isSuccess()){
+        if (result.status.isSuccess()) {
             result.body()
-        }else {
+        } else {
             println(result.bodyAsText())
             null
         }
     }
 
-    suspend fun login(username:String,password:String):BaseResponse<LoginResponse>? {
+    suspend fun login(username: String, password: String): BaseResponse<LoginResponse>? {
         val loginRequest = LoginRequest(username = username, password = password)
-        val result = httpClient.post{
+        val result = httpClient.post {
             url {
                 protocol = URLProtocol.HTTPS
                 host = "test.assessmenttest.uz"
@@ -82,9 +83,9 @@ class ApiService {
             contentType(ContentType.Application.Json)
             setBody(loginRequest)
         }
-        return if (result.status.isSuccess()){
+        return if (result.status.isSuccess()) {
             result.body()
-        }else {
+        } else {
             null
         }
     }
@@ -107,5 +108,6 @@ class ApiService {
         } finally {
             client.close()
         }
+        delay(1000)
     }
 }

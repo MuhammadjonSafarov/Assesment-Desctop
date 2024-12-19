@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -27,17 +28,14 @@ class WelcomeScreen:Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        var locale by remember { mutableStateOf(Locale("en")) }
         var isLoading by remember { mutableStateOf(false) }
         var ipAddress by remember { mutableStateOf("") }
         var macAddress by remember { mutableStateOf("") }
         val scope = rememberCoroutineScope()
-        val preference = Preferences.userRoot().node("my_app")
-        val token =  preference.get("key_user_token","")
+
         if (ipAddress.isNotEmpty() && macAddress.isNotEmpty() && isLoading) {
-            if (token.isNotEmpty())
-                navigator.push(SelectExamScreen())
-            else
-                navigator.push(LoginScreen())
+            navigator.push(LanguageScreen(false,ipAddress,macAddress))
         } else {
             Box (modifier = Modifier.fillMaxSize()){
                 Column (modifier = Modifier.align(Alignment.Center),

@@ -8,7 +8,7 @@ data class Audio(
     val audioFileId: Long?,
     val fileDtos: List<FileDto>?,
     val fileIds: Array<Long>?,
-    val id: Int,
+    val id: Long,
     val name: String,
     val orderNumber: Int,
     val questionIds: Array<Long>?,

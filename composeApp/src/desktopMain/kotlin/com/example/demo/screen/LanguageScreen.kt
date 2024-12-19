@@ -1,12 +1,18 @@
 package com.example.demo.screen
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
@@ -17,7 +23,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.demo.util.AppColors
 import com.example.demo.util.language.getStrings
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.launch
+import org.jetbrains.skiko.toImage
+import java.awt.image.BufferedImage
 
 class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress: String) : Screen {
 
@@ -28,6 +38,7 @@ class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress:
         val strings = getStrings(locale)
         var expanded by remember { mutableStateOf(false) }
         val snackbarHostState = remember { SnackbarHostState() }
+        var showDialog by remember { mutableStateOf(false) }
 
         Box(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.align(Alignment.TopEnd)) {
@@ -82,12 +93,16 @@ class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress:
                     painter = painterResource("logo.xml"),
                     contentDescription = "Icon",
                     tint = Color.Unspecified,
-                    modifier = Modifier.fillMaxWidth(0.414f).fillMaxHeight(0.24f)
+                    modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight(0.24f)
                 )
-                Spacer(modifier = Modifier.width(12.dp).padding(12.dp))
                 Text(strings.app_welcome)
+                val qrCodeImage = generateQRCode("content1234567890")
+                    .toComposeImageBitmap()
+                Image(modifier = Modifier.fillMaxSize(0.4f),
+                      bitmap = qrCodeImage, contentDescription = "QR Code")
                 Button(
-                    modifier = Modifier.padding(all = 12.dp), onClick = {
+                    modifier = Modifier.padding(all = 12.dp),
+                    onClick = {
                         /*coroutineScope.launch {
                             snackbarHostState.showSnackbar(
                                 actionLabel = "OK",// Optional: Amal uchun label (masalan, OK)
@@ -101,7 +116,8 @@ class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress:
                 ) {
                     Text(
                         modifier = Modifier.padding(
-                            start = 24.dp, top = 4.dp, bottom = 4.dp, end = 24.dp
+                            start = 24.dp,
+                            top = 4.dp, bottom = 4.dp, end = 24.dp
                         ), text = strings.app_next
                     )
                 }
@@ -153,6 +169,19 @@ class LanguageScreen(var status: Boolean, val ipAddress: String, val macAddress:
                 )
             }
         }
+    }
+
+    fun generateQRCode(content: String, size: Int = 300): BufferedImage {
+        val qrCodeWriter = QRCodeWriter()
+        val bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, size, size)
+        val image = BufferedImage(size, size, BufferedImage.TYPE_INT_RGB)
+        for (x in 0 until size) {
+            for (y in 0 until size) {
+                val color = if (bitMatrix[x, y]) 0x000000 else 0xFFFFFF // Qora yoki oq
+                image.setRGB(x, y, color)
+            }
+        }
+        return image
     }
 
 }

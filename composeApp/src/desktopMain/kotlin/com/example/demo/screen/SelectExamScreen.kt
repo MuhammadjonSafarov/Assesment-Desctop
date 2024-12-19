@@ -19,16 +19,17 @@ import com.example.demo.util.language.getStrings
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.prefs.Preferences
 import javax.sound.sampled.*
 
 class SelectExamScreen:Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        var locale by remember { mutableStateOf(Locale("en")) }
-        val strings = getStrings(locale)
         var showDialog by remember { mutableStateOf(false) }
         var isRecording by remember { mutableStateOf(false) }
+        val preference = Preferences.userRoot().node("assesment_foefl_app")
+        val listening =  preference.getBoolean("key_listening",false)
         Box(modifier = Modifier.fillMaxSize()){
             Column(
                 modifier = Modifier.align(Alignment.Center),
@@ -53,9 +54,9 @@ class SelectExamScreen:Screen {
                             start = 24.dp, top = 4.dp, bottom = 4.dp, end = 24.dp
                         ), text = "Listining"
                     )
-                    RadioButton( selected = false,
+                    RadioButton(selected = listening,
                         onClick = {
-                            showDialog=true
+
                         }
                     )
                 }
@@ -86,7 +87,7 @@ class SelectExamScreen:Screen {
                     Text(
                         modifier = Modifier.padding(
                             start = 24.dp, top = 4.dp, bottom = 4.dp, end = 24.dp
-                        ), text = "Listining"
+                        ), text = "Readinng"
                     )
                     RadioButton(selected = false,
                         onClick = {

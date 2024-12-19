@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class QuestionData(
     val answerIds: Long?,
-    val answers: List<Long>?,
+    val answers: List<AnswerData>?,
     val correctAnswersCount: Int,
-    val id: Int,
+    val id: Long,
     val name: String
 )

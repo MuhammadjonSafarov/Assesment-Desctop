@@ -19,7 +19,9 @@ import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.demo.screen.auth.LoginScreen
 import com.example.demo.util.language.getStrings
+import java.util.prefs.Preferences
 
 class SelectedPlaceScreen(val language:String) : Screen {
     @Composable
@@ -31,7 +33,8 @@ class SelectedPlaceScreen(val language:String) : Screen {
         var secondExpanded by remember { mutableStateOf(false) }
         var selectedFirstOption by remember { mutableStateOf("") }
         var selectedSecondOption by remember { mutableStateOf("") }
-
+        val preference = Preferences.userRoot().node("assesment_foefl_app")
+        val token =  preference.get("key_user_token","")
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -149,7 +152,12 @@ class SelectedPlaceScreen(val language:String) : Screen {
             }
 
             Button(onClick = {
-                navigator.push(DetailScreen())
+                if (token.isNotEmpty()) {
+                    navigator.push(SelectExamScreen())
+                }else{
+                    navigator.push(LoginScreen())
+                }
+
             }, elevation = ButtonDefaults.elevation(0.dp),
                 border = BorderStroke(1.dp,if(selectedFirstOption.isNotEmpty() && selectedSecondOption.isNotEmpty()) Color.Blue else Color.Gray),
                 colors = ButtonDefaults.buttonColors(
@@ -157,7 +165,7 @@ class SelectedPlaceScreen(val language:String) : Screen {
                     contentColor = if(selectedFirstOption.isNotEmpty() && selectedSecondOption.isNotEmpty()) Color.Blue else Color.Gray
                 )
             ){
-                Text("Click me")
+                Text("Davom etish")
             }
         }
     }
